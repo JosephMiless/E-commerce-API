@@ -86,9 +86,12 @@ export const loginUser = async(req, res) => {
 
         const refreshToken = refToken({id: userCredentals.email, is_valid: true});
 
+        const hashedtoken = await hashPassword(refreshToken);
+
+
         if (userTokens.length > 0) {
 
-            await alterRefreshToken(refreshToken);
+            await alterRefreshToken(hashedtoken, userCredentals.email);
 
             return res.json({
                 message: "User logged in successfuly",
@@ -97,7 +100,7 @@ export const loginUser = async(req, res) => {
 
         };
 
-        await saveRefreshToken(userCredentals.email, refreshToken);
+        await saveRefreshToken(userCredentals.email, hashedtoken);
 
         return res.json({
             message: "User logged in successfuly",

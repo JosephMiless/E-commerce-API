@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { config } from '../config/env.js';
+import { findUserByEmail } from '../users/users.services.js';
 
 export const auth = async (req, res, next) =>{
     const authHeader = await req.headers.authorization;
@@ -22,10 +23,14 @@ export const auth = async (req, res, next) =>{
     });
 };
 
-export const adminAuth = (req, res, next) => {
+export const adminAuth = async (req, res, next) => {
     try {
 
-        const role = user.role;
+        const user = req.user;
+
+        const userProfile = await findUserByEmail(user.email);
+
+        const role = userProfile[0].role;
 
         if(role != "admin") {
             return res.status(403).json({
@@ -37,7 +42,7 @@ export const adminAuth = (req, res, next) => {
         
     } catch (error) {
         res.status(500).json({
-            error: "Internal server error"
+            error: `Internaal server error, ${error}`
         });
     }
 };

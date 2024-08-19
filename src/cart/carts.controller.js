@@ -276,6 +276,12 @@ export const viewCartController = async (req, res) => {
 
         const userCart = await searchCart(curr_user.email);
 
+        if(userCart.length == 0) {
+            return res.status(404).json({
+                message: "Your cart is empty. Browse our products to discover amazing deals"
+            })
+        };
+
         return res.status(200).json({
             userCart
         });

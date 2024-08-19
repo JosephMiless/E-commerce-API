@@ -1,8 +1,9 @@
 import jwt from 'jsonwebtoken';
 import { config } from '../config/env.js';
 import { refreshTokenSchema } from "../validators/token.js";
-import { fetchRefreshToken, logout } from "./tokens.services.js";
+import { fetchRefreshTokenByUser, logout } from "./tokens.services.js";
 import { aToken } from "../utils/jwt.js";
+import { comparePassword } from '../utils/bcrypt.js';
 
 
 export const refreshTokenController = async (req, res) => {
@@ -20,9 +21,18 @@ export const refreshTokenController = async (req, res) => {
 
         const decoded = jwt.decode(token);
 
-        const tokenExists = await fetchRefreshToken(token, decoded.id);
+        const tokenExists = await fetchRefreshTokenByUser(decoded.id);
 
         if (tokenExists.length == 0) {
+            return res.status(404).json({
+                error: "This session has expired. kindly re-login"
+            })
+        };        
+
+        const isMatch = await comparePassword(token, tokenExists[0].tokens);
+
+
+        if (!isMatch ) {
             return res.status(400).json({
                 error: "Invalid token"
             })
