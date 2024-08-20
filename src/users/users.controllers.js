@@ -276,8 +276,6 @@ export const verifyOtpController = async (req, res) => {
 
         const userCredentals = users[0];
 
-        console.log("user", userCredentals);
-
         const isMatch = await comparePassword(otp.toString(), userCredentals.password);
 
         if (!isMatch) {
