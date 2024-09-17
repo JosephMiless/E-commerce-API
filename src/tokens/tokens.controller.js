@@ -19,9 +19,9 @@ export const refreshTokenController = async (req, res) => {
             })
         };
 
-        const decoded = jwt.decode(token);
+        const decoded = jwt.decode(token);        
 
-        const tokenExists = await fetchRefreshTokenByUser(decoded.id);
+        const tokenExists = await fetchRefreshTokenByUser(decoded.email);
 
         if (tokenExists.length == 0) {
             return res.status(404).json({
@@ -43,7 +43,7 @@ export const refreshTokenController = async (req, res) => {
                 return res.status(403).json({error: "This session has expired. Kindly re-login"});
             };
 
-            const accessToken = aToken({email: decoded.id});
+            const accessToken = aToken({id: decoded.id, email: decoded.email});
                         
             return res.status(200).json({
                 accessToken: accessToken

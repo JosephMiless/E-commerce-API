@@ -21,5 +21,5 @@ app.use("/image", imageRouter);
 
 app.listen(config.port, async() => {
     await tables();
-    console.log("server's running on port", config.port);
+    console.log("server1 is running on port", config.port);
 });

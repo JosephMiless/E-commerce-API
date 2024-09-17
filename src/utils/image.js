@@ -15,17 +15,6 @@ export const imageRouter = Router();
         secure: true
     });
 
-
-
-    
-    // Upload an image
-    //  const uploadResult = await cloudinary.uploader.upload(req.file.path)
-    //    .catch((error) => {
-    //        console.log(error);
-    //    });
-    
-    // console.log(uploadResult);
-
     export const uploadImage = async(req, res) => {
         try {
 
@@ -64,6 +53,14 @@ export const imageRouter = Router();
 
 
     imageRouter.put("/upload/:id", upload.single("image"),auth, adminAuth ,uploadImage);
+
+    // Upload an image
+    //  const uploadResult = await cloudinary.uploader.upload(req.file.path)
+    //    .catch((error) => {
+    //        console.log(error);
+    //    });
+    
+    // console.log(uploadResult);
     
 //     // //Optimize delivery by resizing and applying auto-format and auto-quality
 //     // const optimizeUrl = cloudinary.url('shoes', {

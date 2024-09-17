@@ -84,7 +84,7 @@ export const loginUser = async(req, res) => {
 
         const accessToken = aToken({email: userCredentals.email, is_valid: true });
 
-        const refreshToken = refToken({id: userCredentals.email, is_valid: true});
+        const refreshToken = refToken({email: userCredentals.email, is_valid: true});
 
         const hashedtoken = await hashPassword(refreshToken);
 
@@ -124,6 +124,9 @@ export const getProfileController = async (req, res) => {
         
         const curr_user = req.user;
 
+        console.log("curr", curr_user);
+        
+
         if (!curr_user) {
             return res.status(401).json({
                 error: "You can't access this endpoint. Please login."
@@ -132,12 +135,22 @@ export const getProfileController = async (req, res) => {
 
         const profile = await getProfile(curr_user.email);
 
+        if (profile.length == 0) {
+            return res.status(404).json({
+                error: "User not found"
+            })
+        };
+
         return res.status(200).json({ 
             Profile_Details: sanitize(profile[0]) 
         });
 
     } catch (error) {
-        
+        console.log("Error getiing user profile", error);
+
+        return res.status(400).json({
+            message: "Error getting user profile"
+        });
     }
 };
 
@@ -170,7 +183,11 @@ export const updateUserProfileController = async (req, res) => {
         });
 
     } catch (error) {
-        
+        console.log("Error updating user profile", error);
+
+        return res.status(400).json({
+            message: "Error updating user profile"
+        });
     }
 };
 

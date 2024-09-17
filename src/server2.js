@@ -19,5 +19,5 @@ app.use("/payment", paymentRouter);
 
 
 app.listen( config.port2, async() => {
-    console.log("server's running on port", config.port2);
+    console.log("server2 is running on port", config.port2);
 });

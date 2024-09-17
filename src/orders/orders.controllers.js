@@ -55,6 +55,12 @@ export const getAllOrdersController = async(req, res) => {
 
         const orders = await getAllOrders(curr_user.email);
 
+        if(orders.length == 0){
+            return res.status(404).json({
+                error: "You are yet to place an order"
+            })
+        };
+
         return res.status(200).json({
             orders
         })
